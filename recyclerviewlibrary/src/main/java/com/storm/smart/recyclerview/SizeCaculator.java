@@ -76,7 +76,6 @@ public class SizeCaculator {
                     mFirstChildPositionForRow.add(neverComputeChildIndex);
                     mSizeForChildAtPosition.add(new Size(mContentWidth, 300));
                     mRowForChildPosition.add(newRow);
-                    neverComputeChildIndex++;
                     break;
                 case 2://other
                     break;
