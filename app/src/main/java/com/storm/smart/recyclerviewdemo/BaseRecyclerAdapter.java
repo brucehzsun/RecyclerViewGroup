@@ -1,10 +1,12 @@
-package com.storm.smart.recyclerview;
+package com.storm.smart.recyclerviewdemo;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
+import com.storm.smart.recyclerview.RecyclerChildViewType;
+import com.storm.smart.recyclerview.SizeCaculator;
+
 import java.util.List;
 
 /**

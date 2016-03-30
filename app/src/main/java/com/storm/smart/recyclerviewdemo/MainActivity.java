@@ -7,12 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.storm.smart.recyclerview.IRecyclerItem;
 import com.storm.smart.recyclerview.SuitedItemDecoration;
 import com.storm.smart.recyclerview.SuitedLayoutManager;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements PhotosAdapter.OnItemClickListener {
 

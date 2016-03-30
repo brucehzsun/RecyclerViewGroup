@@ -72,18 +72,18 @@ public class SizeCaculator {
             //获取还未测量过的宽高比
             int childViewType = mSizeCalculatorDelegate.getChildViewType(neverComputeChildIndex);
             switch (childViewType) {
-                case RecyclerChildViewType.TYPE_GROUP://title
+                case DisplayUtils.RecyclerViewType.TYPE_GROUP://title
                     Log.d("shz", "getView title position = " + neverComputeChildIndex);
                     mFirstChildPositionForRow.add(neverComputeChildIndex);
                     mSizeForChildAtPosition.add(new Size(mContentWidth, DisplayUtils.dpToPx(100, context)));
                     mRowForChildPosition.add(newRow);
                     break;
-                case RecyclerChildViewType.TYPE_HEADER://header
+                case DisplayUtils.RecyclerViewType.TYPE_HEADER://header
                     mFirstChildPositionForRow.add(neverComputeChildIndex);
                     mSizeForChildAtPosition.add(new Size(mContentWidth, DisplayUtils.dpToPx(200, context)));
                     mRowForChildPosition.add(newRow);
                     break;
-                case RecyclerChildViewType.TYPE_NORMAL://two pic
+                case DisplayUtils.RecyclerViewType.TYPE_NORMAL://two pic
                 default:
                     double aspectRatioForIndex = 0;
                     aspectRatioForIndex = 1.7777;

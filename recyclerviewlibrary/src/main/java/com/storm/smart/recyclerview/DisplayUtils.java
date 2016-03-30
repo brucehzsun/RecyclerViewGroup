@@ -8,12 +8,19 @@ import android.util.TypedValue;
  */
 public class DisplayUtils {
 
+    public class RecyclerViewType {
+        public static final int TYPE_NORMAL = 0;
+        public static final int TYPE_GROUP = 1;
+        public static final int TYPE_HEADER = 2;
+        public static final int TYPE_FOODER = 3;
+    }
+
     public static int dpToPx(final float n, final Context context) {
         return (int) TypedValue.applyDimension(1, n, context.getResources().getDisplayMetrics());
     }
 
     public static int pxToDp(final int n, final Context context) {
-        return (int)TypedValue.applyDimension(0, (float)n, context.getResources().getDisplayMetrics());
+        return (int) TypedValue.applyDimension(0, (float) n, context.getResources().getDisplayMetrics());
     }
 
 //    // 获取 设备的Hight

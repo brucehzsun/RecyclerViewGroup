@@ -1,7 +1,5 @@
 package com.storm.smart.recyclerviewdemo;
 
-import com.storm.smart.recyclerview.IRecyclerItem;
-
 /**
  * Created by sunhongzhi on 2016/3/30.
  */

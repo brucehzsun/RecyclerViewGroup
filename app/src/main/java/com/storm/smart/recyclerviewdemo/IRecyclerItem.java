@@ -1,4 +1,4 @@
-package com.storm.smart.recyclerview;
+package com.storm.smart.recyclerviewdemo;
 
 /**
  * Created by sunhongzhi on 2016/3/30.
