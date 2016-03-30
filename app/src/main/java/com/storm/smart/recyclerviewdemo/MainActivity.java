@@ -19,19 +19,22 @@ public class MainActivity extends AppCompatActivity implements PhotosAdapter.OnI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ArrayList<String> datas = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            datas.add("" + i);
-        }
+        GetItemTask task = new GetItemTask(new GetItemTask.OnGetInfoSuccessListener() {
+            @Override
+            public void onGetInfoSuccess(ArrayList<ImageItem> datas) {
+                RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+                PhotosAdapter adapter = new PhotosAdapter(MainActivity.this, datas, MainActivity.this);
+                recyclerView.setAdapter(adapter);
+                SuitedLayoutManager layoutManager = new SuitedLayoutManager(adapter);
+                layoutManager.setMaxRowHeight(getResources().getDisplayMetrics().heightPixels / 3);
+                recyclerView.addItemDecoration(new SuitedItemDecoration(DisplayUtils.dpToPx(4.0f, MainActivity.this)));
+                recyclerView.setLayoutManager(layoutManager);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+            }
+        });
+        task.execute("");
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        PhotosAdapter adapter = new PhotosAdapter(this, datas, this);
-        recyclerView.setAdapter(adapter);
-        SuitedLayoutManager layoutManager = new SuitedLayoutManager(adapter);
-        layoutManager.setMaxRowHeight(getResources().getDisplayMetrics().heightPixels / 3);
-        recyclerView.addItemDecoration(new SuitedItemDecoration(DisplayUtils.dpToPx(4.0f, this)));
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
     }
 
     @Override
