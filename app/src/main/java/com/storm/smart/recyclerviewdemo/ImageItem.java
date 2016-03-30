@@ -1,15 +1,15 @@
 package com.storm.smart.recyclerviewdemo;
 
+import com.storm.smart.recyclerview.IRecyclerItem;
+
 /**
  * Created by sunhongzhi on 2016/3/30.
  */
-public class ImageItem {
+public class ImageItem extends IRecyclerItem {
 
     private String title;
 
     private String url;
-
-    private int type;
 
     public String getTitle() {
         return title;
@@ -25,13 +25,5 @@ public class ImageItem {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
     }
 }

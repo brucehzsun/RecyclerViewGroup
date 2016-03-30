@@ -55,7 +55,7 @@ public class GetItemTask extends AsyncTask<String, Void, ArrayList<ImageItem>> {
                 JSONObject groupObj = resultArray.getJSONObject(i);
                 ImageItem groupItem = new ImageItem();
                 groupItem.setTitle(groupObj.getString("title"));
-                groupItem.setType(1);
+                groupItem.setViewType(1);
                 itemList.add(groupItem);
 
                 JSONArray detailArray = groupObj.getJSONArray("result");

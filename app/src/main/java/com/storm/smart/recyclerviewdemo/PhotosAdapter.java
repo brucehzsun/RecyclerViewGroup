@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.storm.smart.recyclerview.BaseRecyclerAdapter;
+import com.storm.smart.recyclerview.IRecyclerItem;
 import com.storm.smart.recyclerview.RecyclerChildViewType;
 import com.storm.smart.recyclerview.SizeCaculator;
 
@@ -18,94 +20,72 @@ import java.util.List;
 /**
  * Created by asdzheng on 2015/12/28.
  */
-public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.MyViewHolder> implements SizeCaculator.SizeCalculatorDelegate {
-    private List<ImageItem> mPhotos;
-
-//    private ArrayMap<String, Double> photoAspectRatios;
-
+public class PhotosAdapter extends BaseRecyclerAdapter<PhotosAdapter.MyViewHolder> implements SizeCaculator.SizeCalculatorDelegate {
     private Context mContext;
 
     OnItemClickListener mListener;
 
-    public PhotosAdapter(Context context, List<ImageItem> mPhotos, OnItemClickListener listener) {
-        this.mPhotos = mPhotos;
+    public PhotosAdapter(Context context, OnItemClickListener listener) {
+        super(context);
         mContext = context;
         mListener = listener;
     }
 
-    public void setHearder() {
-        ImageItem item = new ImageItem();
-        item.setType(RecyclerChildViewType.TYPE_HEADER);
-        mPhotos.add(0, item);
+
+    @Override
+    protected MyViewHolder onCreateGroupViewHolder(ViewGroup parent) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.recyclerview_item, parent, false);
+        MyViewHolder viewHolder = new MyViewHolder(view);
+        return viewHolder;
     }
 
     @Override
-    public int getChildViewType(int position) {
-        if (position < getItemCount()) {
-            ImageItem info = mPhotos.get(position);
-            return info.getType();
-        }
-        return 0;
-    }
-
-
-    public void clear() {
-        mPhotos.clear();
-        notifyDataSetChanged();
+    protected MyViewHolder onCreateNormalViewHolder(ViewGroup parent) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.recyclerview_item, parent, false);
+        MyViewHolder viewHolder = new MyViewHolder(view);
+        return viewHolder;
     }
 
     @Override
-    public int getItemViewType(int position) {
-//        return super.getItemViewType(position);
-        return mPhotos.get(position).getType();
+    protected MyViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        View header = LayoutInflater.from(mContext).inflate(R.layout.layout_header, parent, false);
+        MyViewHolder headerHolder = new MyViewHolder(header);
+        return headerHolder;
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case RecyclerChildViewType.TYPE_HEADER:
-                View header = LayoutInflater.from(mContext).inflate(R.layout.layout_header, parent, false);
-                MyViewHolder headerHolder = new MyViewHolder(header);
-                return headerHolder;
-            default:
-                View view = LayoutInflater.from(mContext).inflate(R.layout.recyclerview_item, parent, false);
-                MyViewHolder viewHolder = new MyViewHolder(view);
-                return viewHolder;
-        }
-    }
-
-    @Override
-    public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        ImageItem item = mPhotos.get(position);
-        switch (item.getType()) {
-            case RecyclerChildViewType.TYPE_HEADER:
-                break;
-            default:
-                holder.title.setText(item.getTitle());
+    protected void onBindNormalHolder(final MyViewHolder holder, final int position) {
+        ImageItem item = (ImageItem) getmDatas().get(position);
+        holder.title.setText(item.getTitle());
 //        holder.imageView.setImageURI(Uri.parse(item.getUrl()));
-                if (mListener != null) {
-                    holder.title.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mListener.onItemClick(holder.title, position);
-                        }
-                    });
-
-                    holder.title.setOnLongClickListener(new View.OnLongClickListener() {
-                        @Override
-                        public boolean onLongClick(View v) {
-                            mListener.onItemLongClick(v, position);
-                            return false;
-                        }
-                    });
+        if (mListener != null) {
+            holder.title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onItemClick(holder.title, position);
                 }
+            });
+
+            holder.title.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    mListener.onItemLongClick(v, position);
+                    return false;
+                }
+            });
         }
     }
 
     @Override
-    public int getItemCount() {
-        return mPhotos.size();
+    protected void onBindGroupHolder(MyViewHolder holder, int position) {
+
     }
+
+    @Override
+    protected void onBindHeaderHolder(MyViewHolder holder, int position) {
+
+    }
+
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
