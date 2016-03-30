@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.storm.smart.recyclerview.RecyclerChildViewType;
 import com.storm.smart.recyclerview.SizeCaculator;
 
 import java.util.List;
@@ -32,7 +31,7 @@ public abstract class BaseRecyclerAdapter<VH extends RecyclerView.ViewHolder> ex
         notifyDataSetChanged();
         if (isAddHeader) {
             IRecyclerItem item = new IRecyclerItem();
-            item.setViewType(RecyclerChildViewType.TYPE_HEADER);
+            item.setViewType(com.storm.smart.recyclerview.DisplayUtils.RecyclerViewType.TYPE_HEADER);
             mDatas.add(0, item);
         }
     }
@@ -61,11 +60,11 @@ public abstract class BaseRecyclerAdapter<VH extends RecyclerView.ViewHolder> ex
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
-            case RecyclerChildViewType.TYPE_HEADER:
+            case com.storm.smart.recyclerview.DisplayUtils.RecyclerViewType.TYPE_HEADER:
                 return onCreateHeaderViewHolder(parent);
-            case RecyclerChildViewType.TYPE_GROUP:
+            case com.storm.smart.recyclerview.DisplayUtils.RecyclerViewType.TYPE_GROUP:
                 return onCreateGroupViewHolder(parent);
-            case RecyclerChildViewType.TYPE_NORMAL:
+            case com.storm.smart.recyclerview.DisplayUtils.RecyclerViewType.TYPE_NORMAL:
             default:
                 return onCreateNormalViewHolder(parent);
         }
@@ -82,13 +81,13 @@ public abstract class BaseRecyclerAdapter<VH extends RecyclerView.ViewHolder> ex
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         IRecyclerItem item = mDatas.get(position);
         switch (item.getViewType()) {
-            case RecyclerChildViewType.TYPE_HEADER:
+            case com.storm.smart.recyclerview.DisplayUtils.RecyclerViewType.TYPE_HEADER:
                 onBindHeaderHolder((VH) holder, position);
                 break;
-            case RecyclerChildViewType.TYPE_GROUP:
+            case com.storm.smart.recyclerview.DisplayUtils.RecyclerViewType.TYPE_GROUP:
                 onBindGroupHolder((VH) holder, position);
                 break;
-            case RecyclerChildViewType.TYPE_NORMAL:
+            case com.storm.smart.recyclerview.DisplayUtils.RecyclerViewType.TYPE_NORMAL:
             default:
                 onBindNormalHolder((VH) holder, position);
         }
