@@ -78,7 +78,8 @@ public class PhotosAdapter extends BaseRecyclerAdapter<PhotosAdapter.MyViewHolde
 
     @Override
     protected void onBindGroupHolder(MyViewHolder holder, int position) {
-
+        ImageItem item = (ImageItem) getmDatas().get(position);
+        holder.title.setText(item.getTitle());
     }
 
     @Override
