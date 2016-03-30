@@ -1,5 +1,6 @@
 package com.storm.smart.recyclerview;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseArray;
@@ -21,8 +22,11 @@ public class SuitedLayoutManager extends RecyclerView.LayoutManager {
 
     int onLayoutChildTimes = 0;
 
-    public SuitedLayoutManager(SizeCaculator.SizeCalculatorDelegate sizeCalculatorDelegate) {
+    private Context mContext;
+
+    public SuitedLayoutManager(Context context, SizeCaculator.SizeCalculatorDelegate sizeCalculatorDelegate) {
         mSizeCalculator = new SizeCaculator(sizeCalculatorDelegate);
+        this.mContext = context;
     }
 
     private int getContentHeight() {
@@ -34,7 +38,7 @@ public class SuitedLayoutManager extends RecyclerView.LayoutManager {
     }
 
     private int preFillGrid(Direction direction, int dy, int childDecorateTop, RecyclerView.Recycler recycler, RecyclerView.State state) {
-        int firstChildPositionForRow = mSizeCalculator.getFirstChildPositionForRow(mFirstVisibleRow);
+        int firstChildPositionForRow = mSizeCalculator.getFirstChildPositionForRow(mContext, mFirstVisibleRow);
         SparseArray sparseArray = new SparseArray(getChildCount());
         int paddingLeft = getPaddingLeft();
         int decoratedTop = childDecorateTop + getPaddingTop();
@@ -49,12 +53,12 @@ public class SuitedLayoutManager extends RecyclerView.LayoutManager {
                 switch (direction) {
                     case UP:
                         int upNewViewPosition = mFirstVisiblePosition - 1;
-                        int upNewViewHeight = mSizeCalculator.sizeForChildAtPosition(upNewViewPosition).getHeight();
+                        int upNewViewHeight = mSizeCalculator.sizeForChildAtPosition(mContext, upNewViewPosition).getHeight();
 //                        LogUtil.i(TAG, "UP = oldTop " + decoratedTop + " | upNewViewHeight = " + upNewViewHeight + " | newTop = " + (decoratedTop - upNewViewHeight ));
                         decoratedTop = decoratedTop - upNewViewHeight;
                         break;
                     case DOWN:
-                        int firstViewHeight = mSizeCalculator.sizeForChildAtPosition(mFirstVisiblePosition).getHeight();
+                        int firstViewHeight = mSizeCalculator.sizeForChildAtPosition(mContext, mFirstVisiblePosition).getHeight();
 //                        LogUtil.i(TAG, "DOWN = oldTop " + decoratedTop + " | firstViewHeight = " + firstViewHeight + " | newTop = " + (decoratedTop + firstViewHeight ));
                         decoratedTop = decoratedTop + firstViewHeight;
                         break;
@@ -74,14 +78,14 @@ public class SuitedLayoutManager extends RecyclerView.LayoutManager {
         int childPaddingTop = decoratedTop;
 
         for (int i = mFirstVisiblePosition; i < state.getItemCount(); i++) {
-            Size sizeForChildAtPosition = mSizeCalculator.sizeForChildAtPosition(i);
+            Size sizeForChildAtPosition = mSizeCalculator.sizeForChildAtPosition(mContext, i);
             //是否加上下一个view就超过屏幕的宽度
             if (childPaddingLeft + sizeForChildAtPosition.getWidth() > getContentWidth()) {
                 childPaddingLeft = paddingLeft;
                 //上一个view的坐标
                 int lastPosition = i - 1;
                 //childPaddingTop一直叠加每一行view的高度
-                int lastViewHeight = mSizeCalculator.sizeForChildAtPosition(lastPosition).getHeight();
+                int lastViewHeight = mSizeCalculator.sizeForChildAtPosition(mContext, lastPosition).getHeight();
                 childPaddingTop = childPaddingTop + lastViewHeight;
             }
 
@@ -201,8 +205,8 @@ public class SuitedLayoutManager extends RecyclerView.LayoutManager {
             return;
         }
         mForceClearOffsets = true;
-        mFirstVisibleRow = mSizeCalculator.getRowForChildPosition(position);
-        mFirstVisiblePosition = mSizeCalculator.getFirstChildPositionForRow(mFirstVisibleRow);
+        mFirstVisibleRow = mSizeCalculator.getRowForChildPosition(mContext, position);
+        mFirstVisiblePosition = mSizeCalculator.getFirstChildPositionForRow(mContext, mFirstVisibleRow);
         requestLayout();
     }
 

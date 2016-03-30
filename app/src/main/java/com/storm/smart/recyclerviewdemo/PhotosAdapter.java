@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.storm.smart.recyclerview.RecyclerChildViewType;
 import com.storm.smart.recyclerview.SizeCaculator;
 
 import java.util.List;
@@ -32,6 +33,12 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.MyViewHold
         mListener = listener;
     }
 
+    public void setHearder() {
+        ImageItem item = new ImageItem();
+        item.setType(RecyclerChildViewType.TYPE_HEADER);
+        mPhotos.add(0, item);
+    }
+
     @Override
     public int getChildViewType(int position) {
         if (position < getItemCount()) {
@@ -49,36 +56,49 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.MyViewHold
 
     @Override
     public int getItemViewType(int position) {
-        return super.getItemViewType(position);
+//        return super.getItemViewType(position);
+        return mPhotos.get(position).getType();
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.recyclerview_item, parent, false);
-        MyViewHolder viewHolder = new MyViewHolder(view);
-        return viewHolder;
+        switch (viewType) {
+            case RecyclerChildViewType.TYPE_HEADER:
+                View header = LayoutInflater.from(mContext).inflate(R.layout.layout_header, parent, false);
+                MyViewHolder headerHolder = new MyViewHolder(header);
+                return headerHolder;
+            default:
+                View view = LayoutInflater.from(mContext).inflate(R.layout.recyclerview_item, parent, false);
+                MyViewHolder viewHolder = new MyViewHolder(view);
+                return viewHolder;
+        }
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         ImageItem item = mPhotos.get(position);
-        holder.title.setText(item.getTitle());
+        switch (item.getType()) {
+            case RecyclerChildViewType.TYPE_HEADER:
+                break;
+            default:
+                holder.title.setText(item.getTitle());
 //        holder.imageView.setImageURI(Uri.parse(item.getUrl()));
-        if (mListener != null) {
-            holder.title.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.onItemClick(holder.title, position);
-                }
-            });
+                if (mListener != null) {
+                    holder.title.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mListener.onItemClick(holder.title, position);
+                        }
+                    });
 
-            holder.title.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    mListener.onItemLongClick(v, position);
-                    return false;
+                    holder.title.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            mListener.onItemLongClick(v, position);
+                            return false;
+                        }
+                    });
                 }
-            });
         }
     }
 

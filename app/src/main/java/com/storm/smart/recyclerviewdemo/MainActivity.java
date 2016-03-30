@@ -24,10 +24,11 @@ public class MainActivity extends AppCompatActivity implements PhotosAdapter.OnI
             public void onGetInfoSuccess(ArrayList<ImageItem> datas) {
                 RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
                 PhotosAdapter adapter = new PhotosAdapter(MainActivity.this, datas, MainActivity.this);
+                adapter.setHearder();
                 recyclerView.setAdapter(adapter);
-                SuitedLayoutManager layoutManager = new SuitedLayoutManager(adapter);
+                SuitedLayoutManager layoutManager = new SuitedLayoutManager(getBaseContext(), adapter);
                 layoutManager.setMaxRowHeight(getResources().getDisplayMetrics().heightPixels / 3);
-                recyclerView.addItemDecoration(new SuitedItemDecoration(DisplayUtils.dpToPx(4.0f, MainActivity.this)));
+                recyclerView.addItemDecoration(new SuitedItemDecoration(getBaseContext(), DisplayUtils.dpToPx(4.0f, MainActivity.this)));
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
             }

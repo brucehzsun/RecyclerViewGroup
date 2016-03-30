@@ -1,6 +1,7 @@
 package com.storm.smart.recyclerview;
 
 
+import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -35,14 +36,14 @@ public class SizeCaculator {
         mMaxRowHeight = DEFAULT_MAX_ROW_HEIGHT;
     }
 
-    private void computeFirstChildPositionsUpToRow(int row) {
+    private void computeFirstChildPositionsUpToRow(Context context, int row) {
         while (row >= mFirstChildPositionForRow.size()) {
 //            LogUtil.i(TAG, "row = " + row + " | mSizeForChildAtPosition.size()" + mSizeForChildAtPosition.size());
-            computeChildSizesUpToPosition();
+            computeChildSizesUpToPosition(context);
         }
     }
 
-    private void computeChildSizesUpToPosition() {
+    private void computeChildSizesUpToPosition(Context context) {
         if (mContentWidth == -1) {
             throw new RuntimeException("Invalid content width. Did you forget to set it?");
         }
@@ -71,15 +72,18 @@ public class SizeCaculator {
             //获取还未测量过的宽高比
             int childViewType = mSizeCalculatorDelegate.getChildViewType(neverComputeChildIndex);
             switch (childViewType) {
-                case 1://title
+                case RecyclerChildViewType.TYPE_GROUP://title
                     Log.d("shz", "getView title position = " + neverComputeChildIndex);
                     mFirstChildPositionForRow.add(neverComputeChildIndex);
-                    mSizeForChildAtPosition.add(new Size(mContentWidth, 300));
+                    mSizeForChildAtPosition.add(new Size(mContentWidth, DisplayUtils.dpToPx(100, context)));
                     mRowForChildPosition.add(newRow);
                     break;
-                case 2://other
+                case RecyclerChildViewType.TYPE_HEADER://header
+                    mFirstChildPositionForRow.add(neverComputeChildIndex);
+                    mSizeForChildAtPosition.add(new Size(mContentWidth, DisplayUtils.dpToPx(200, context)));
+                    mRowForChildPosition.add(newRow);
                     break;
-                case 0://two pic
+                case RecyclerChildViewType.TYPE_NORMAL://two pic
                 default:
                     double aspectRatioForIndex = 0;
                     aspectRatioForIndex = 1.7777;
@@ -114,10 +118,10 @@ public class SizeCaculator {
      * @param row
      * @return
      */
-    int getFirstChildPositionForRow(int row) {
+    int getFirstChildPositionForRow(Context context, int row) {
         //如果list里没有row行的数据，就需要重新计算
         if (row >= mFirstChildPositionForRow.size()) {
-            computeFirstChildPositionsUpToRow(row);
+            computeFirstChildPositionsUpToRow(context, row);
         }
         return mFirstChildPositionForRow.get(row);
     }
@@ -128,9 +132,9 @@ public class SizeCaculator {
      * @param position
      * @return
      */
-    int getRowForChildPosition(int position) {
+    int getRowForChildPosition(Context context, int position) {
         if (position >= mRowForChildPosition.size()) {
-            computeChildSizesUpToPosition();
+            computeChildSizesUpToPosition(context);
         }
         return mRowForChildPosition.get(position);
     }
@@ -161,9 +165,9 @@ public class SizeCaculator {
      * @param position
      * @return
      */
-    Size sizeForChildAtPosition(int position) {
+    Size sizeForChildAtPosition(Context context, int position) {
         if (position >= mSizeForChildAtPosition.size()) {
-            computeChildSizesUpToPosition();
+            computeChildSizesUpToPosition(context);
         }
         return mSizeForChildAtPosition.get(position);
     }

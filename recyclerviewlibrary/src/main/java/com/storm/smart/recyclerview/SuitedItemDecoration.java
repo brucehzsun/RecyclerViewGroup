@@ -1,5 +1,6 @@
 package com.storm.smart.recyclerview;
 
+import android.content.Context;
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,25 +13,28 @@ public class SuitedItemDecoration extends RecyclerView.ItemDecoration {
     private static String TAG;
     private static int mSpacing;
 
+    private Context context;
+
     static {
         TAG = SuitedItemDecoration.class.getSimpleName();
         SuitedItemDecoration.DEFAULT_SPACING = 12;
     }
 
-    public SuitedItemDecoration() {
-        this(SuitedItemDecoration.DEFAULT_SPACING);
-    }
+//    public SuitedItemDecoration(C) {
+//        this(SuitedItemDecoration.DEFAULT_SPACING);
+//    }
 
-    public SuitedItemDecoration(int mSpacing) {
+    public SuitedItemDecoration(Context context, int mSpacing) {
         this.mSpacing = mSpacing;
+        this.context = context;
     }
 
     private boolean isLeftChild(int position, SizeCaculator caculator) {
-        return caculator.getFirstChildPositionForRow(caculator.getRowForChildPosition(position)) == position;
+        return caculator.getFirstChildPositionForRow(context, caculator.getRowForChildPosition(context, position)) == position;
     }
 
     private boolean isTopChild(int position, SizeCaculator caculator) {
-        return caculator.getRowForChildPosition(position) == 0;
+        return caculator.getRowForChildPosition(context, position) == 0;
     }
 
     @Override
